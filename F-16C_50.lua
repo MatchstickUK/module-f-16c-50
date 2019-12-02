@@ -1300,31 +1300,6 @@ local function mergeString(original_string, new_data, location)
 	return before..table.concat(merged)..after
 end
 
-local generalReplacements = {
-	["a"] = "@",
-	["o"] = "="
-	}
-	
-local formatReplacements = {
-	["*"] = "<",
-	[" "] = ";",
-	["0"] = "!",
-	["1"] = "\"",
-	["2"] = "{",
-	["3"] = "$",
-	["4"] = "%",
-	["5"] = "&",
-	["6"] = "+",
-	["7"] = ",",
-	["8"] = "-",
-	["9"] = "^",
-	["."] = "_",
-	["a"] = "@",
-	["o"] = "?",
-    ["\'"] = "|",
-    [":"] = "`"
-}
-
 ------------------------------------------------------------------DED Display Main Function-------------------------------------------------------------------------
 local function buildDEDLine(line)
 -- Get Layout Information for line being built
