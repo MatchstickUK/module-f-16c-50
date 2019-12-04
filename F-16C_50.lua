@@ -1,4 +1,4 @@
--- V1.2 by Warlord (aka BlackLibrary)
+-- V1.3a by Warlord (aka BlackLibrary)
 -- DED Display, MAGV,INS,UHF, CMDS & Initial version of outputs from mainpanel_init.lua by Matchstick
 -- Tested and fixes by BuzzKillington
 
@@ -883,7 +883,7 @@ DEDLayout_l2["STN value5"] = {12,5}
 DEDLayout_l2["OWN lbl"] = {18,3}
 DEDLayout_l2["GPS TIME lbl"] = {0,8}
 DEDLayout_l2["GPS TIME status"] = {9,3,0,"_inv","I"}
-DEDLayout_l2["Asterisks on ETR_both"] = {8,1,14,"","I"}
+DEDLayout_l2["Asterisks on ETR_both"] = {8,1,12,"","I"}
 DEDLayout_l2["IPF Reset lbl"] = {14,9,0,"_inv","I"}
 DEDLayout_l2["Asterisks on IPF_both"] = {13,1,23,"","I"}
 DEDLayout_l2["A-G DL XMT lbl"] = {3,3}
