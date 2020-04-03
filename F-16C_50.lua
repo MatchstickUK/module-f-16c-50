@@ -1,4 +1,4 @@
--- V1.4a by Warlord (aka BlackLibrary)
+-- V1.5a by Warlord (aka BlackLibrary)
 -- DED Display, MAGV,INS,UHF, CMDS & Initial version of outputs from mainpanel_init.lua by Matchstick
 -- Tested and fixes by BuzzKillington
 
@@ -27,7 +27,7 @@ local defineFloat = BIOS.util.defineFloat
 local defineIntegerFromGetter = BIOS.util.defineIntegerFromGetter
 local defineDoubleCommandButton = BIOS.util.defineDoubleCommandButton
 
-function define3Pos2CommandSwitch(msg, device_id, switch1, switch2, arg_number, category, description)
+local function define3Pos2CommandSwitch(msg, device_id, switch1, switch2, arg_number, category, description)
 	local alloc = moduleBeingDefined.memoryMap:allocateInt{ maxValue = 2 }
 	moduleBeingDefined.exportHooks[#moduleBeingDefined.exportHooks+1] = function(dev0)
 	    local val = dev0:get_argument_value(arg_number)
@@ -74,7 +74,7 @@ function define3Pos2CommandSwitch(msg, device_id, switch1, switch2, arg_number, 
 end
 
 --Seems to be F16C specific
-function defineSpringloaded_3_pos_tumb(msg, device_id, downSwitch, upSwitch, arg_number, category, description)
+local function defineSpringloaded_3_pos_tumb(msg, device_id, downSwitch, upSwitch, arg_number, category, description)
 	local alloc = moduleBeingDefined.memoryMap:allocateInt{ maxValue = 2 }
 	moduleBeingDefined.exportHooks[#moduleBeingDefined.exportHooks+1] = function(dev0)
 	    local val = dev0:get_argument_value(arg_number)
@@ -192,7 +192,7 @@ define3Pos2CommandSwitch("ANTI_SKID_SW", 7, 3010, 3004, 357, "Gear System", "ANT
 --ECS
 defineTumb("TEMP_KNB", 13, 3002, 692, 0.1, {-0.3,0.3}, nil, true, "ECS", "TEMP Knob")
 defineTumb("AIR_SOURCE_KNB", 13, 3001, 693, 0.1, {0.0, 0.4}, nil, true, "ECS", "AIR SOURCE Knob, OFF/NORM/DUMP/RAM")
-definePotentiometer("DEFOG_LEVER", 13, 3003, 602, nil, "ECS", "DEFOG Lever")
+defineToggleSwitch("DEFOG_LEVER", 13, 3003, 602, "ECS", "DEFOG Lever")
 
 --EPU
 defineToggleSwitch("EPU_SW_COVER_ON", 6, 3001, 527, "EPU", "EPU Switch Cover for ON, OPEN/CLOSE")
@@ -228,10 +228,8 @@ defineToggleSwitch("UFC_SW", 17, 3001, 718, "Avionic Panel", "UFC Switch, UFC/OF
 defineToggleSwitch("GPS_SW", 59, 3001, 720, "Avionic Panel", "GPS Switch, GPS/OFF")
 defineTumb("MIDS_LVT_KNB", 41, 3001, 723, 0.1, {0.0,0.2}, nil, true, "Avionic Panel", "MIDS LVT Knob, ZERO/OFF/ON")
 defineTumb("INS_KNB", 14, 3001, 719, 0.1, {0.0,0.6}, nil, true, "Avionic Panel", "INS Knob, OFF/STOR HDG/NORM/NAV/CAL/INFLT ALIGN/ATT")
-
---WIP:
-defineToggleSwitch("MAP_SW", 3, 3101, 722, "WIP", "MAP Switch, MAP/OFF")
-defineToggleSwitch("DL_SW", 3, 3103, 721, "WIP", "DL Switch, DL/OFF")
+defineToggleSwitch("MAP_SW", 61, 3001, 722, "Avionic Panel", "MAP Switch, MAP/OFF")
+defineToggleSwitch("DL_SW", 60, 3001, 721, "Avionic Panel", "DL Switch, DL/OFF")
 
 --Modular Mission Computer (MMC)
 define3PosTumb("MASTER_ARM_SW", 19, 3002, 105, "MMC", "MASTER ARM Switch, MASTER ARM/OFF/SIMULATE")
@@ -268,10 +266,8 @@ define3PosTumb("ICP_FLIR_GAIN_SW", 17, 3027, 189, "UFC", "ICP FLIR GAIN/LEVEL Sw
 defineSpringloaded_3_pos_tumb("ICP_DED_SW", 17, 3031, 3030, 183, "UFC", "ICP DED Increment/Decrement Switch")
 defineSpringloaded_3_pos_tumb("ICP_FLIR_SW", 17, 3026, 3025, 188, "UFC", "ICP FLIR Increment/Decrement Switch")
 defineSpringloaded_3_pos_tumb("ICP_DRIFT_SW", 17, 3029, 3028, 186, "UFC", "ICP DRIFT CUTOUT/WARN RESET Switch, DRIFT C/O /NORM/WARN RESET")
-defineTumb("ICP_DATA_RTN_SW", 17, 3032, 184, 1, {-1, 0}, nil, true, "UFC", "ICP Data Control Switch, RTN")
-defineToggleSwitch("ICP_DATA_SEQ_SW", 17, 3033, 184, "UFC", "ICP Data Control Switch, SEQ")
-defineToggleSwitch("ICP_DATA_UP_SW", 17, 3034, 185, "UFC", "ICP Data Control Switch, UP")
-defineTumb("ICP_DATA_DN_SW", 17, 3035, 185, 1, {-1, 0}, nil, true, "UFC", "ICP Data Control Switch, DN")
+defineSpringloaded_3_pos_tumb("ICP_DATA_RTN_SEQ_SW", 17, 3032, 3033, 184, "UFC", "ICP Data Control Switch, RTN-SEQ")
+defineSpringloaded_3_pos_tumb("ICP_DATA_UP_DN_SW", 17, 3035, 3034, 185, "UFC", "ICP Data Control Switch, UP-DN")
 definePushButton("F_ACK_BTN", 17, 3036, 122, "UFC", "F-ACK Button")
 definePushButton("IFF_ID_BTN", 17, 3037, 125, "UFC", "IFF IDENT Button")
 define3PosTumb("RF_SW", 17, 3038, 100, "UFC", "RF Switch, SILENT/QUIET/NORM")
@@ -429,7 +425,7 @@ defineRotary("AIRSPEED_SET_KNB", 46, 3001, 71, "Airspeed Indicator", "SET INDEX 
 defineRotary("ALT_BARO_SET_KNB", 45, 3003, 62, "Altimeter", "Altimeter Barometric Setting Knob")
 defineSpringloaded_3_pos_tumb("ALT_MODE_LV", 45, 3002, 3001, 60, "Altimeter", "Altimeter Mode Lever, ELEC/OFF/PNEU")
 
---SAI
+--SAI ARU-42/A-2
 definePushButton("SAI_CAGE", 47, 3002, 67, "SAI", "SAI Cage Knob, (LMB) Pull to cage")
 defineRotary("SAI_PITCH_TRIM", 47, 3003, 66, "SAI", "SAI Cage Knob, (MW) Adjust aircraft reference symbol")
 
